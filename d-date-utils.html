@@ -111,6 +111,46 @@
         return weekArray;
       },
 
+      getColorArray: function(d) { //eventually merge this into getWeekArray...
+        var dayArray = [];
+        var cArray = [];
+        var daysInMonth = this.getDaysInMonth(d);
+        var daysInWeek;
+        var emptyDays;
+        var firstDayOfWeek;
+        var week;
+        var cMap = this.cmMaker(10,0);
+        var col;
+        var colArray =[];
+        var weekArray = [];
+
+        console.log(cMap)
+
+        for (var i = 1; i <= daysInMonth; i++) {
+          dayArray.push(new Date(d.getFullYear(), d.getMonth(), i));
+          cArray.push(cMap(Math.floor((Math.random() * 10) + 1)));
+        };
+
+        while (dayArray.length) {
+          firstDayOfWeek = dayArray[0].getDay();
+          daysInWeek = 7 - firstDayOfWeek;
+          emptyDays = 7 - daysInWeek;
+          week = dayArray.splice(0, daysInWeek);
+          col = cArray.splice(0, daysInWeek);
+          
+
+          for (var i = 0; i < emptyDays; i++) {
+            week.unshift(null);
+            col.unshift(null);
+          };
+
+          weekArray.push(week);
+          colArray.push(col);
+        }
+        console.log(weekArray)
+        return colArray;
+      },
+
       format: function(date) {
         var m = this.getFullMonth(date);
         var d = date.getDate();
@@ -172,7 +212,7 @@ PolymerExpressions.prototype.date = function (input, format) {
         hours = date.getHours(),
         minutes = date.getMinutes(),
         seconds = date.getSeconds(),
-        count = Math.floor((Math.random() * 10) + 1);
+        count = Math.floor((Math.random() * 10) + 1); //TODO replace with db, jeff
 
     if (!format) {
         format = "MM/dd/yy  count: cc";
