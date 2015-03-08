@@ -111,8 +111,6 @@
         return weekArray;
       },
 
-
-
       format: function(date) {
         var m = this.getFullMonth(date);
         var d = date.getDate();
@@ -133,6 +131,29 @@
         m += d1.getMonth();
         m -= d2.getMonth();
         return m;
+      },
+
+      cmMaker: function(high,low) { //return color from white to green, Jeff's first closure
+
+          //var start_color = 0, 0, 0
+          //var end_color = 92, 184, 92 //bootstrap success green
+          var r_max = 92; //76
+          var g_max = 184; //175
+          var b_max = 92; //80
+
+          r_b = (255 - r_max*(low/high))/(1-(low/high));
+          r_a = (r_max-r_b)/high;
+          g_b = (255 - g_max*(low/high))/(1-(low/high))
+          g_a = (g_max-g_b)/high
+          b_b = (255 - b_max*(low/high))/(1-(low/high))
+          b_a = (b_max-b_b)/high
+
+          return function(x) {
+              var r = Math.floor((r_a*x)+r_b);
+              var g = Math.floor((g_a*x)+g_b);
+              var b = Math.floor((b_a*x)+b_b);
+              return 'rgb('+ (r) +', ' + (g) + ', ' + (b) + ')';
+          }
       }
 
     })
@@ -150,10 +171,11 @@ PolymerExpressions.prototype.date = function (input, format) {
         year = date.getFullYear(),
         hours = date.getHours(),
         minutes = date.getMinutes(),
-        seconds = date.getSeconds();
+        seconds = date.getSeconds(),
+        count = Math.floor((Math.random() * 10) + 1);
 
     if (!format) {
-        format = "MM/dd/yyyy";
+        format = "MM/dd/yy  count: cc";
     }
 
     format = format.replace("MM", month.toString().replace(/^(\d)$/, '0$1'));
@@ -166,7 +188,7 @@ PolymerExpressions.prototype.date = function (input, format) {
 
     format = format.replace("dd", day.toString().replace(/^(\d)$/, '0$1'));
 
-    if (format.indexOf("t") > -1) {
+    if (format.indexOf("tt") > -1) {
         if (hours > 11) {
             format = format.replace("t", "pm");
         } else {
@@ -195,6 +217,10 @@ PolymerExpressions.prototype.date = function (input, format) {
 
     if (format.indexOf("ss") > -1) {
         format = format.replace("ss", seconds.toString().replace(/^(\d)$/, '0$1'));
+    }
+
+    if (format.indexOf("cc") > -1) {
+        format = format.replace("cc", count.toString());
     }
 
     return format;

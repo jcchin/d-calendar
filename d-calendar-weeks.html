@@ -34,6 +34,7 @@ Fired when selecting a specific day of the month.
               <div layout horizontal center-justified
                   class="day {{isSameDay(weeksFull[w][d], nowDate) ? 'currentday':''}} {{!isDayInMonth(weeksFull[w][d], date) ? 'offday':''}}"
                   date="{{weeksFull[w][d]}}" 
+                  style="background-color:{{count}};"
                   selected?="{{isSameDay(weeksFull[w][d], selectedDate)}}"
                   on-tap="{{selectDay}}">
                 <div layout horizontal center style="font-size: medium">{{day}}</div>
@@ -90,6 +91,7 @@ Fired when selecting a specific day of the month.
 
         // updates the model data for the weeks grids
         this.weeksFull = this.dateUtils.getWeekArray(this.date);
+        //this.colorsFull = this.dateUtils.getColorArray(this.date);
         this.weeks = this.dateUtils.getWeekArray(this.date).map(function(week){
           if (!week || week == null) return null;
           return week.map(function(day){
@@ -102,11 +104,12 @@ Fired when selecting a specific day of the month.
       },
 
       updateWeeks: function() {
-        
       },
 
       selectDay: function(e, detail, sender) {
         this.fire('d-calendar-date-selected', {date: sender.getAttribute('date')});
+        cm = this.dateUtils.cmMaker(10,0); //normalize colorMaker
+        this.count = cm(Math.floor((Math.random() * 10) + 1))
       }
 
     })
